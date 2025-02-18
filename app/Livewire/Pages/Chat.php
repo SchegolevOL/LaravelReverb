@@ -3,6 +3,7 @@
 namespace App\Livewire\Pages;
 
 use App\Events\MessageSendEvent;
+use App\Events\UserTypingEvent;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -84,7 +85,10 @@ class Chat extends Component
         $newMessage=Message::query()->find($event['message']['id'])->load('sender:id,name','receiver:id,name');
         $this->messages[]=$newMessage;
     }
-
+public function userTyping()
+{
+    broadcast(new UserTypingEvent($this->senderId, $this->receiverId))->toOthers();
+}
 
 
 
