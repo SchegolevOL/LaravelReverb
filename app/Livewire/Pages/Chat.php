@@ -24,7 +24,7 @@ class Chat extends Component
         $this->senderId=auth()->user()->id;
         $this->receiverId=$userId;
         $this->messages=$this->getMessages();
-
+        $this->dispatch('message-updated');
     }
 
     public function render()
@@ -47,6 +47,8 @@ class Chat extends Component
         $this->messages[]=$sendMessage;
         broadcast(new MessageSendEvent($sendMessage));
         $this->message='';
+
+        $this->dispatch('message-updated');
     }
     public function getMessages()
     {
