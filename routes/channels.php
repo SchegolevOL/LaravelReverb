@@ -13,3 +13,8 @@ Broadcast::channel('chat-channel.{receiverId}', function ($user, $receiverId) {
 
     return (int)$user->id === (int)$receiverId;
 });
+
+Broadcast::channel('unread-channel.{receiverId}', function ($user, $receiverId) {
+
+    return (int)$user->id === (int)$receiverId;
+});

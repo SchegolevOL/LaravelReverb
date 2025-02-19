@@ -60,9 +60,12 @@
                                                             <path d="M7 12H12" stroke="#2d05f5" stroke-width="null" stroke-linecap="round" class="my-path"></path>
                                                         </svg>
                                                     </a>
-                                                    @if($user->unread_messages_count>0)
-                                                    <span class="bg-red-500 text-white rounded-full text-xs font-bold px-2 py-1">{{$user->unread_messages_count}}</span>
-                                                    @endif
+
+                                                    <span id="unread-count-{{$user->id}}"
+                                                          class="{{$user->unread_messages_count>0?'top-0 right-11 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full':''}}" >
+                                                        {{$user->unread_messages_count>0?$user->unread_messages_count:''}}
+                                                    </span>
+
                                                 </div>
                                             </td>
                                         </tr>
@@ -84,4 +87,13 @@
 
 
 </x-app-layout>
+<script type="module">
+    window.Echo.private('unread-channel.{{auth()->user()->id}}').listen('UnreadMessageEvent', (event)=>{
 
+        const unreadElementCount = document.getElementById(`unread-count-${event.senderId}`);
+        if (unreadElementCount){
+            unreadElementCount.classList =  event.unreadMessagesCount > 0 ? 'top-0 right-11 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full':'';
+            unreadElementCount.textContent = event.unreadMessagesCount > 0 ? event.unreadMessagesCount : '';
+        }
+    })
+</script>

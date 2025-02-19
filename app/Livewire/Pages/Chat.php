@@ -3,6 +3,7 @@
 namespace App\Livewire\Pages;
 
 use App\Events\MessageSendEvent;
+use App\Events\UnreadMessageEvent;
 use App\Events\UserTypingEvent;
 use App\Models\Message;
 use App\Models\User;
@@ -26,10 +27,12 @@ class Chat extends Component
         $this->receiverId=$userId;
         $this->messages=$this->getMessages();
         $this->dispatch('message-updated');
+        $this->readAllMessages();
     }
 
     public function render()
     {
+        $this->readAllMessages();
         return view('livewire.pages.chat');
     }
 
@@ -47,6 +50,8 @@ class Chat extends Component
 
         $this->messages[]=$sendMessage;
         broadcast(new MessageSendEvent($sendMessage));
+        $unreadMessagesCount = $this->getUnreadMessagesCount();
+        broadcast(new UnreadMessageEvent($this->senderId, $this->receiverId, $unreadMessagesCount))->toOthers();
         $this->message='';
 
         $this->dispatch('message-updated');
@@ -90,9 +95,15 @@ public function userTyping()
     broadcast(new UserTypingEvent($this->senderId, $this->receiverId))->toOthers();
 }
 
+public function readAllMessages()
+{
+    Message::query()->where('sender_id',$this->receiverId)->where('receiver_id',$this->senderId)->where('is_read', false)->update(['is_read'=>true]);
+}
 
-
-
+public function getUnreadMessagesCount()
+{
+    return Message::query()->where('receiver_id',$this->receiverId)->where('is_read', false)->count();
+}
 
 
 }
