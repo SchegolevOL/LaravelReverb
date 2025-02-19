@@ -95,5 +95,13 @@
             unreadElementCount.classList =  event.unreadMessagesCount > 0 ? 'top-0 right-11 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full':'';
             unreadElementCount.textContent = event.unreadMessagesCount > 0 ? event.unreadMessagesCount : '';
         }
-    })
+
+        //Play notification audio
+        if(event.unreadMessagesCount > 0){
+            const audio = new Audio('{{asset('sounds/helium.mp3')}}');
+            audio.play();
+        }
+
+
+    });
 </script>

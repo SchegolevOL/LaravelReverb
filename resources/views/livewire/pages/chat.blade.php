@@ -206,6 +206,7 @@
 <script type="module">
     let chatContainer = document.getElementById('chat-container')
     let typingTimeout = null;
+
     window.Echo.private(`chat-channel.{{$senderId}}`).listen('UserTypingEvent', (event)=>{
 
         const messageInput = document.getElementById('message-input');
@@ -218,7 +219,10 @@
                 messageInput.placeholder = 'Type here...'
             }
         }, 2000)
-    })
+    }).listen('MessageSendEvent', (event)=>{
+        const audio = new Audio('{{asset('sounds/helium.mp3')}}');
+        audio.play();
+    });
 
 
 Livewire.on('message-updated', ()=>{
