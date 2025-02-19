@@ -16,6 +16,7 @@ class Message extends Model
         'file_original_name',
         'folder_path',
         'is_read',
+        'file_type'
     ];
 
 

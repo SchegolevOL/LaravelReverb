@@ -11,15 +11,17 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class Chat extends Component
 {
+    use WithFileUploads;
     public $user;
     public $message;
     public $senderId;
     public $receiverId;
     public $messages;
-
+    public $file;
     public function mount($userId)
     {
         $this->user=$this->getUser($userId);
@@ -46,6 +48,8 @@ class Chat extends Component
     }
     public function sendMessage()
     {
+
+
         $sendMessage = $this->saveMessage();
 
         $this->messages[]=$sendMessage;
@@ -53,7 +57,7 @@ class Chat extends Component
         $unreadMessagesCount = $this->getUnreadMessagesCount();
         broadcast(new UnreadMessageEvent($this->senderId, $this->receiverId, $unreadMessagesCount))->toOthers();
         $this->message='';
-
+        $this->file=null;
         $this->dispatch('message-updated');
     }
     public function getMessages()
@@ -74,14 +78,27 @@ class Chat extends Component
     }
     public function saveMessage()
     {
+        #File Handling
+        $fileName=null;
+        $file_original_name=null;
+        $folder_path=null;
+        $fileType = null;
+        if ($this->file){
+            $fileName = $this->file->hashName();
+            $file_original_name = $this->file->getClientOriginalName();
+            $folder_path = $this->file->store('chat_files', 'public');
+            $fileType         = $this->file->getMimeType();
+        }
+
         return Message::query()->create([
             'sender_id'=>$this->senderId,
             'receiver_id'=>$this->receiverId,
             'message'=>$this->message,
-            /*'file_name',
-            'file_original_name',
-            'folder_path',*/
+            'file_name'=>$fileName,
+            'file_original_name'=>$file_original_name,
+            'folder_path'=>$folder_path,
             'is_read'=>false,
+            'file_type'=>$fileType,
         ]);
     }
     #[On('echo-private:chat-channel.{senderId},MessageSendEvent')]
