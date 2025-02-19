@@ -32,8 +32,8 @@
                                                     class="px-3.5 py-2 bg-gray-100 rounded justify-start  items-center gap-3 inline-flex">
                                                     <h5 class="text-gray-900 text-sm font-normal leading-snug">{{$message->message}}</h5>
                                                 </div>
-                                                @else
-                                                    <a download href="{{asset($message->folder_path)}}" target="_blank">
+                                                @endif
+                                                    <a download href="{{asset('storage/' . $message->folder_path)}}" target="_blank">
                                                     @if(str_starts_with($message->file_type, 'image/'))
 
                                                             <img class="w-20 h-20 object-cover shadow-md" src="{{asset('storage/' . $message->folder_path)}}"/>
@@ -63,7 +63,7 @@
 
                                                     @endif
                                                     </a>
-                                                @endif
+
                                                 <div class="justify-end items-center inline-flex mb-2.5">
                                                     <h6 class="text-gray-500 text-xs font-normal leading-4 py-1">{{$message->created_at->format('h:i A')}}</h6>
                                                 </div>
@@ -83,8 +83,8 @@
                                                     class="px-3.5 py-2 bg-gray-100 rounded justify-start  items-center gap-3 inline-flex">
                                                     <h5 class="text-gray-900 text-sm font-normal leading-snug">{{$message->message}}</h5>
                                                 </div>
-                                            @else
-                                                <a download href="{{asset($message->folder_path)}}" target="_blank">
+                                            @endif
+                                                <a download href="{{asset('storage/' . $message->folder_path)}}" target="_blank">
                                                     @if(str_starts_with($message->file_type, 'image/'))
 
                                                         <img class="w-20 h-20 object-cover shadow-md" src="{{asset('storage/' . $message->folder_path)}}"/>
@@ -114,7 +114,7 @@
 
                                                     @endif
                                                 </a>
-                                            @endif
+
                                             <div class="justify-start items-center inline-flex">
                                                 <h3 class="text-gray-500 text-xs font-normal leading-4 py-1">{{$message->created_at->format('h:i A')}}</h3>
                                             </div>
