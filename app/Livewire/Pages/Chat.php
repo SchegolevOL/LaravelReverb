@@ -7,6 +7,7 @@ use App\Events\UnreadMessageEvent;
 use App\Events\UserTypingEvent;
 use App\Models\Message;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Attributes\On;
@@ -22,6 +23,7 @@ class Chat extends Component
     public $receiverId;
     public $messages;
     public $file;
+
     public function mount($userId)
     {
         $this->user=$this->getUser($userId);
@@ -30,6 +32,7 @@ class Chat extends Component
         $this->messages=$this->getMessages();
         $this->dispatch('message-updated');
         $this->readAllMessages();
+
     }
 
     public function render()

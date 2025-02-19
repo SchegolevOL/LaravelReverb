@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Message extends Model
 {
+    protected $appends=['formatted_date'];
     protected $fillable=[
         'sender_id',
         'receiver_id',
@@ -43,5 +44,11 @@ class Message extends Model
         static::created(function ($model) {
             $model->created_at = Carbon::now();
         });
+    }
+
+    public function getFormattedDateAttribute()
+    {
+        $date = Carbon::parse($this->created_date);
+        return $date->isToday() ? 'Today' :($date->isYesterday()?'Yesterday':$date->format('d-m-Y'));
     }
 }
