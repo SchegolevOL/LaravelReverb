@@ -6,5 +6,5 @@
 
 
 - A project demonstrating the capabilities of reverb using livewire.
-- A chat between juniors with file messaging has been created.
+- A chat between users with file messaging has been created.
 
